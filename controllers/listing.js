@@ -1,12 +1,34 @@
 const Listing=require("../models/listing.js")
 
+//***********************DASHBOARD ROUTE***********************//
+
+
+module.exports.dashBoard=async (req,res)=>{
+    res.render("listing/dashboard.ejs");
+}
 
 //***********************INDEX ROUTE***********************//
 
 
 module.exports.index=async (req,res)=>{
-    const allListing = await Listing.find({}); 
-    res.render("listing/index.ejs",{allListing});
+    // let owner=res.locals.currUser
+    // const allListing = await Listing.find({}); 
+    // console.log(allListing)
+    // res.render("listing/index.ejs",{allListing});
+
+    let owner = res.locals.currUser; 
+    if (!owner) {
+        res.redirect("/login");
+    }
+    
+    const allListing = await Listing.find({ owner: owner._id });
+    if (allListing.length === 0) {
+        req.flash("error", "You have no listings. Please create a new one.");
+        return res.redirect("/listings/new");
+    }
+    console.log(allListing); 
+    res.render("listing/index.ejs", { allListing });
+    
 }
 
 
@@ -29,6 +51,27 @@ module.exports.showListing=async (req,res)=>{
     }
     res.render("listing/show.ejs",{listing});
     console.log(listing);
+}
+
+//***********************SEARCH ROUTE***********************//
+
+
+module.exports.searchListing=async (req,res)=>{
+    let query=req.query.query;
+    const allListing=await Listing.find({
+        $or: [
+            { title: { $regex: query, $options: "i" } },
+            { location: { $regex: query, $options: "i" } },
+            { country: { $regex: query, $options: "i" } }
+        ]
+    }).populate({path:"reviews",populate: {path:"author" }}).populate("owner");
+    if(allListing.length===0){
+        req.flash("error","Listing does not exist!");
+        res.redirect("/listings");
+    }
+    
+    res.render("listing/search.ejs",{allListing});
+    console.log(allListing);
 }
 
 //***********************POST OR CREATE ROUTE***********************//

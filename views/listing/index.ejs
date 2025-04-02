@@ -23,7 +23,7 @@
             display: none;
         }
         .tax-toggle{
-            border: 1px solid black;
+            border: 1px solid rgb(183, 183, 183);
             border-radius: 1rem;
             height: 3.25rem;
             padding: 1rem;
@@ -31,10 +31,13 @@
             display: flex;
             align-items: center;
         }
+        .form-check-label{
+            opacity: 0.9;
+        }
     </style>
     
     <!-- FILTERS -->
-
+    
      <div id="filters">
         <div class="filter">
             <div><i class="fa-solid fa-fire"></i></div>
@@ -90,8 +93,8 @@
      </div>
 
 
-     <!-- Card -->
-
+    <!-- Card -->
+    
     <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 mt-3">
         <% for(let listing of allListing) { %>
             <a href="/listings/<%=listing._id  %>" class="listing-link">
@@ -101,14 +104,16 @@
                     <div class="card-body">
                         <p class="card-text">
                             <b><%=listing.title  %></b><br>
-                            &#8377;<%=listing.price.toLocaleString("en-IN")%> / night
-                            <i class="tax-info">&nbsp;&nbsp; +18% GST</i>
+                            <span class="no-tax-info"> &#8377;<%=listing.price.toLocaleString("en-IN")%> / night</span>
+                            <span class="tax-info">&#8377;<%=(listing.price +(listing.price * 0.18)).toLocaleString("en-IN") %> / night </span>
                         </p>
                     </div>
                 </div>
             </a>
         <% } %>
+        
     </div>
+    
     <!-- Card --> 
 
 <script>
@@ -122,5 +127,14 @@
                 info.style.display="none";
             }
         }
+        let notaxInfo=document.getElementsByClassName("no-tax-info");
+        for(info of notaxInfo){
+            if(info.style.display!="none"){
+                info.style.display="none"
+            }else{
+                info.style.display="inline";
+            }
+        }
+        
     })
 </script>

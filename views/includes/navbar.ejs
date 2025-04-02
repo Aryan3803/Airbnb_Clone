@@ -18,6 +18,11 @@
     padding: 0.5rem 3rem;
   }
 
+  .search-bar{
+    position: relative;
+    left: 4rem;
+  }
+
 </style>
 
 <nav class="navbar navbar-expand-md bg-body-light border-bottom sticky-top">
@@ -32,13 +37,14 @@
         </div>
 
         <!-- SEARCH BAR -->
-
-        <div class="navbar-nav ms-auto">
-          <form class="d-flex" role="search">
-            <input class="form-control me-2 search-inp" type="search" placeholder="Search destinations" >
+        
+        <div class="navbar-nav ms-auto search-bar">
+          <form class="d-flex" role="search" id="searchForm" action="/listings/search" method="get">
+            <input class="form-control me-2 search-inp" type="search" name="query" placeholder="Search destinations" >
             <button class="btn search-btn" type="submit"><i class="fa-solid fa-magnifying-glass"></i>Search</button>
           </form>
         </div>
+        
 
          <!-- SEARCH BAR -->
 
@@ -52,6 +58,7 @@
           <a class="nav-link" href="/logout"><b>Log Out</b></a>
           <% } %>
         </div>
+        
       </div>
     </div>
   </nav>

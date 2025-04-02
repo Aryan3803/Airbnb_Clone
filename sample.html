@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+ <!-- head: below existing links -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@4.0.1/dist/css/multi-select-tag.min.css">
+</head>
+<style>
+  .img-cate{
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+  }    
+  /* .Category{
+      width: 100%;
+  } */
+  .multiselect{
+      width: 400px;
+      /* padding: auto; */
+  }
+</style>
+<body>
+  <label  for="countries">Category</label>
+  <select class="multiselect" name="countries[]" id="countries" multiple>
+      <option value="1" selected>Afghanistan</option>
+      <option value="2" selected>Australia</option>
+      <option value="3">Germany</option>
+      <option value="4">Canada</option>
+      <option value="5">Russia</option>
+  </select>  
+  <!-- End of <body> -->
+<script src="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@4.0.1/dist/js/multi-select-tag.min.js"></script>
+<script>
+  var tagSelector = new MultiSelectTag('countries');
+</script>
+</body>
+</html>
