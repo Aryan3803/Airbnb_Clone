@@ -1,13 +1,21 @@
 <% if(success && success.length){ %>
 <div style="text-align: center;" class="alert alert-success alert-dismissible fade show col-6 offset-3" role="alert">
     <%= success %>
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    <button type="button" class="btn-close flashBtn" data-bs-dismiss="alert" aria-label="Close"></button>
 </div>
 <% } %>
 
 <% if(error && error.length){ %>
     <div style="text-align: center;" class="alert alert-danger alert-dismissible fade show col-6 offset-3" role="alert">
         <%= error %>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        <button type="button" class="btn-close flashBtn" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
-    <% } %>
+<% } %>
+
+<script>
+    function handleFlash(){
+        const flashButtons = document.querySelectorAll(".flashBtn");
+        flashButtons.forEach(btn => btn.click());
+    }
+    setTimeout(handleFlash, 3000);
+</script>

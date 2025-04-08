@@ -14,12 +14,24 @@ module.exports.isLoggedIn=(req,res,next)=>{
     next();
 }
 
-module.exports.saveRedirectUrl = (req,res,next)=>{
-    if(req.session.redirectUrl){
-        res.locals.redirectUrl=req.session.redirectUrl;
+module.exports.userLoggedIn=(req,res,next)=>{
+    if(!req.isAuthenticated()){
+        req.session.redirectUrl=req.originalUrl;
+        req.flash("error","Please Log in first!");
+        return res.redirect("/user/login");
     }
     next();
 }
+
+module.exports.saveRedirectUrl = (req, res, next) => {
+    if (req.originalUrl.startsWith("/user")) {
+        req.session.userRedirectUrl = req.originalUrl;
+    } else {
+        req.session.adminRedirectUrl = req.originalUrl;
+    }
+    next();
+};
+
 
 module.exports.isOwner=async (req,res,next)=>{
     let {id}=req.params;
@@ -36,7 +48,7 @@ module.exports.isReviewAuthor=async (req,res,next)=>{
     let review = await Review.findById(reviewId);
     if(!review.author.equals(res.locals.currUser._id)){
         req.flash("error","You are not the author of this review");
-        return res.redirect(`/listings/${id}`)
+        return res.redirect(`/user/listings/${id}`)
     }
     next();
 }

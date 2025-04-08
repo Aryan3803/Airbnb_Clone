@@ -7,15 +7,12 @@ module.exports.dashBoard=async (req,res)=>{
     res.render("listing/dashboard.ejs");
 }
 
+
+
 //***********************INDEX ROUTE***********************//
 
 
 module.exports.index=async (req,res)=>{
-    // let owner=res.locals.currUser
-    // const allListing = await Listing.find({}); 
-    // console.log(allListing)
-    // res.render("listing/index.ejs",{allListing});
-
     let owner = res.locals.currUser; 
     if (!owner) {
         res.redirect("/login");
@@ -27,7 +24,7 @@ module.exports.index=async (req,res)=>{
         return res.redirect("/listings/new");
     }
     console.log(allListing); 
-    res.render("listing/index.ejs", { allListing });
+    res.render("listing/index.ejs", { allListing, showSearchBar: true  });
     
 }
 
@@ -36,7 +33,7 @@ module.exports.index=async (req,res)=>{
 
 
 module.exports.renderNewForm=(req,res)=>{
-    res.render("listing/new.ejs");
+    res.render("listing/new.ejs",{showSearchBar: false});
 }
 
 //***********************SHOW ROUTE***********************//
@@ -49,38 +46,49 @@ module.exports.showListing=async (req,res)=>{
         req.flash("error","Listing does not exist!");
         res.redirect("/listings");
     }
-    res.render("listing/show.ejs",{listing});
+    res.render("listing/show.ejs",{listing,showSearchBar: false});
     console.log(listing);
 }
 
-//***********************SEARCH ROUTE***********************//
+//***********************SEARCH AND CATEGORY ROUTE***********************//
 
 
 module.exports.searchListing=async (req,res)=>{
     let query=req.query.query;
+    query = query.replace(/-/g, " ");
     const allListing=await Listing.find({
         $or: [
             { title: { $regex: query, $options: "i" } },
             { location: { $regex: query, $options: "i" } },
-            { country: { $regex: query, $options: "i" } }
-        ]
+            { country: { $regex: query, $options: "i" } },
+            { category: { $in: [query] } }
+        ],
+        owner: req.user._id
     }).populate({path:"reviews",populate: {path:"author" }}).populate("owner");
+    console.log(allListing);
     if(allListing.length===0){
         req.flash("error","Listing does not exist!");
         res.redirect("/listings");
     }
-    
-    res.render("listing/search.ejs",{allListing});
-    console.log(allListing);
+
+    res.render("listing/search.ejs",{allListing,showSearchBar: true});
+    // console.log(allListing);
 }
+
 
 //***********************POST OR CREATE ROUTE***********************//
 
 
 module.exports.createListing=async (req,res)=>{
+    console.log("Request Body:", req.body);
     let url=req.file.path;
     let filename=req.file.filename;
+    let category = req.body.listing.category || []; 
+    if (!Array.isArray(category)) {
+        category = [category]; 
+    }
     const newListing=new Listing(req.body.listing);
+    newListing.category=category
     newListing.owner=req.user._id;  
     newListing.image={url,filename};
     await newListing.save();
@@ -100,7 +108,7 @@ module.exports.renderEditForm=async (req,res)=>{
     }
     let originalImageUrl=listing.image.url;
     originalImageUrl=originalImageUrl.replace("/upload","/upload/w_250");
-    res.render("listing/edit.ejs",{listing,originalImageUrl});
+    res.render("listing/edit.ejs",{listing,originalImageUrl,showSearchBar: false});
 }
 
 //***********************UPDATE ROUTE***********************//

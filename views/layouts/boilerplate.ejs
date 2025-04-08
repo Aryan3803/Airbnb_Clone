@@ -14,7 +14,14 @@
     <link rel="stylesheet" href="/css/multiselectCSS.css">
 </head>
 <body>
-    <%- include("../includes/navbar.ejs") %>
+    <% if (currentPath.startsWith('/user')) { %>
+        <%- include("../includes/userNavbar.ejs") %>
+      <% } else  { %>
+        <%- include("../includes/navbar.ejs") %>
+      <% }  %>
+      
+
+    
     <div class="container">
         <%- include("../includes/flash.ejs") %>
         <%- body  %>

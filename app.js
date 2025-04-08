@@ -14,11 +14,14 @@ const flash=require("connect-flash");
 const listingsRouter=require("./routes/listing.js");
 const reviewsRouter=require("./routes/review.js");
 const userRouter=require("./routes/user.js");
+const adminRouter=require("./routes/admin.js");
 const session = require("express-session");
 const MongoStore=require("connect-mongo");
 const passport=require("passport")
 const LocalStrategy=require("passport-local");
+const Admin=require("./models/admin.js");
 const User=require("./models/user.js");
+
 
 
 const dbURL=process.env.ATLASDB_URL
@@ -72,21 +75,47 @@ app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
 
-passport.use(new LocalStrategy(User.authenticate()));
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());
+// passport.use(new LocalStrategy(User.authenticate()));
+// passport.serializeUser(User.serializeUser());
+// passport.deserializeUser(User.deserializeUser());
+
+passport.use("admin-local", new LocalStrategy(Admin.authenticate()));
+passport.use("user-local", new LocalStrategy(User.authenticate()));
+
+passport.serializeUser((user, done) => {
+  const type = user.role === "User" ? "User" : "Admin"; 
+  done(null, { id: user._id, type });  // saves to session: { id: "xyz", type: "User" }
+});
+
+passport.deserializeUser(async (userData, done) => {
+  try {
+    if (userData.type === "Admin") {
+      const admin = await Admin.findById(userData.id);
+      return done(null, admin);
+    } else {
+      const user = await User.findById(userData.id);
+      return done(null, user);
+    }
+  } catch (err) {
+    done(err);
+  }
+});
+
 
 app.use((req,res,next)=>{
     res.locals.success=req.flash("success");
     res.locals.error=req.flash("error");
     res.locals.currUser=req.user;
+    res.locals.currentPath = req.originalUrl;
+    console.log(res.locals.currUser);
     next();
 })
 
 app.use("/",listingsRouter)
 // app.use("/listings", listingsRouter);
-app.use("/listings/:id/reviews",reviewsRouter)
-app.use("/",userRouter)
+app.use("/user/listings/:id/reviews",reviewsRouter)
+app.use("/user",userRouter)
+app.use("/",adminRouter)
 
 
 app.all("*",(req,res,next)=>{

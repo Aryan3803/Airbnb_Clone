@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotel Listing - Login or Signup</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        
+        .logo {
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #e60000;
+        }
+        
+        .main-container {
+            width: 100%;
+            max-width: 1000px;
+            padding: 20px;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #e60000;
+            margin-bottom: 40px;
+            font-size: 32px;
+        }
+        
+        .options-container {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+        }
+        
+        .option-card {
+            flex: 1;
+            max-width: 450px;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .option-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .user-option {
+            background-color: white;
+            color: #e60000;
+            border: 2px solid #e60000;
+        }
+        
+        .admin-option {
+            background-color: #e60000;
+            color: white;
+        }
+        
+        .icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+        
+        h2 {
+            font-size: 28px;
+            margin-bottom: 15px;
+        }
+        
+        p {
+            font-size: 16px;
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+        
+        .button-container {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .btn {
+            padding: 12px 25px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            font-size: 16px;
+            border: none;
+        }
+        
+        .btn-primary {
+            background-color: #e60000;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: #cc0000;
+        }
+        
+        .btn-secondary {
+            background-color: white;
+            color: #e60000;
+            border: 2px solid #e60000;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #f8f8f8;
+        }
+        
+        .btn-white {
+            background-color: white;
+            color: #e60000;
+        }
+        
+        .btn-white:hover {
+            background-color: #f8f8f8;
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid white;
+            color: white;
+        }
+        
+        .btn-outline:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        @media (max-width: 768px) {
+            .options-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .option-card {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="logo">HotelHive</div>
+    
+    <div class="main-container">
+        <h1>Choose Your Account Type</h1>
+        
+        <div class="options-container">
+            <!-- User Option -->
+            <div class="option-card user-option">
+                <div class="icon">👤</div>
+                <h2>For Users</h2>
+                <p>Find and book the perfect hotel for your next trip.Access your bookings and leave reviews.</p>
+                <div class="button-container admin-buttons">
+                    <a href="/user/login"><button class="btn btn-primary">Login</button></a>
+                    <a href="/user/signup"><button class="btn btn-secondary">Sign Up</button></a>
+                </div>
+            </div>
+            
+            <!-- Admin Option -->
+            <div class="option-card admin-option">
+                <div class="icon">🏢</div>
+                <h2>For Admins</h2>
+                <p>Manage your hotel listings, view bookings, update availability, and access analytics for your properties.</p>
+                <div class="button-container">
+                    <a href="/login"><button class="btn btn-white">Login</button></a>
+                    <a href="/signup"><button class="btn btn-outline">Sign Up</button></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

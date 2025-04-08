@@ -1,0 +1,188 @@
+<% layout("/layouts/boilerplate") %>
+<style>
+    #filters{
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+    .filter{
+        text-align: center;
+        margin-right: 2rem;
+        margin-top: 2rem;
+        opacity: 0.7;
+        cursor: pointer;
+        width: 80px;
+    }
+    .filter:hover{
+        opacity: 1;
+        cursor: pointer;
+    }
+    
+    .filter p{
+        font-size: 0.8rem;
+    }
+    
+    @media (min-width: 992px) {
+        .filter-icon {
+            font-size: 1.1rem;
+        }
+
+        .filter p {
+            font-size: 0.8rem;
+        }
+
+        #filters {
+            column-gap: 8px;
+            row-gap: 6px;
+        }
+
+        .filter {
+            width: 75px;
+        }
+    }
+
+    /* Slightly bigger for smaller devices */
+    @media (max-width: 991.98px) {
+        .filter-icon {
+            font-size: 1.4rem;
+        }
+    }
+
+    .tax-info{
+        display: none;
+    }
+    .tax-toggle{
+        border: 1px solid rgb(183, 183, 183);
+        border-radius: 1rem;
+        height: 3.25rem;
+        padding: 1rem;
+        margin-top: 0.5rem;
+        display: flex;
+        align-items: center;
+    }
+    .form-check-label{
+        opacity: 0.9;
+    }
+</style>
+
+<!-- FILTERS -->
+
+<div class="container mt-4 d-flex flex-column justify-content-center align-items-center">
+    <!-- Toggle button (only on small screens) -->
+    <div class="d-lg-none text-center mb-3">
+        <button class="btn btn-outline-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#filterCollapse" aria-expanded="false" aria-controls="filterCollapse">
+            Show Filters
+        </button>
+    </div>
+
+    <!-- Filters Section -->
+    <div id="filterCollapse" class="collapse d-lg-flex flex-wrap justify-content-center" style="row-gap: 10px;">
+        <div id="filters" class="d-flex flex-wrap justify-content-center gap-2 gap-lg-1">
+            <div class="filter text-center" onclick="redirectToPage('trending')">
+                <div><i class="fa-solid fa-fire filter-icon"></i></div>
+                <p class="mb-0">Trending</p>
+            </div>
+            <div class="filter text-center" onclick="redirectToPage('rooms')">
+                <div><i class="fa-solid fa-bed filter-icon"></i></div>
+                <p class="mb-0">Rooms</p>
+            </div>
+            <div class="filter text-center" onclick="redirectToPage('Iconic-cities')">
+                <div><i class="fa-solid fa-mountain-city filter-icon"></i></div>
+                <p class="mb-0">Iconic Cities</p>
+            </div>
+            <div class="filter text-center" onclick="redirectToPage('mountains')">
+                <div><i class="fa-solid fa-mountain filter-icon"></i></div>
+                <p class="mb-0">Mountains</p>
+            </div>
+            <div class="filter text-center" onclick="redirectToPage('castles')">
+                <div><i class="fa-brands fa-fort-awesome filter-icon"></i></div>
+                <p class="mb-0">Castles</p>
+            </div>
+            <div class="filter text-center" onclick="redirectToPage('amazing-pools')">
+                <div><i class="fa-solid fa-person-swimming filter-icon"></i></div>
+                <p class="mb-0">Amazing pools</p>
+            </div>
+            <div class="filter text-center" onclick="redirectToPage('camping')">
+                <div><i class="fa-solid fa-campground filter-icon"></i></div>
+                <p class="mb-0">Camping</p>
+            </div>
+            <div class="filter text-center" onclick="redirectToPage('farms')">
+                <div><i class="fa-solid fa-cow filter-icon"></i></div>
+                <p class="mb-0">Farms</p>
+            </div>
+            <div class="filter text-center" onclick="redirectToPage('arctic')">
+                <div><i class="fa-solid fa-snowflake filter-icon"></i></div>
+                <p class="mb-0">Arctic</p>
+            </div>
+            <div class="filter text-center" onclick="redirectToPage('domes')">
+                <div><i class="fa-solid fa-igloo filter-icon"></i></div>
+                <p class="mb-0">Domes</p>
+            </div>
+            <div class="filter text-center" onclick="redirectToPage('boat')">
+                <div><i class="fa-solid fa-ship filter-icon"></i></div>
+                <p class="mb-0">Boat</p>
+            </div>
+        </div>
+    </div>
+    
+
+    <!-- Tax toggle -->
+    <div class="d-flex justify-content-center mt-3">
+        <div class="tax-toggle">
+            <div class="form-check-reverse form-switch">
+                <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
+                <label class="form-check-label" for="flexSwitchCheckDefault">Display total after taxes</label>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Card -->
+
+    <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 mt-3">
+        <% for(let listing of allListing) { %>
+            <a href="/user/listings/<%=listing._id  %>" class="listing-link">
+                <div class="card col listing-card" >
+                    <img src="<%=listing.image.url %>" class="card-img-top" alt="Listing_image" style="height: 20rem;">
+                    <div class="card-img-overlay"></div>
+                    <div class="card-body">
+                        <p class="card-text">
+                            <b><%=listing.title  %></b><br>
+                            <span class="no-tax-info"> &#8377;<%=listing.price.toLocaleString("en-IN")%> / night</span>
+                            <span class="tax-info">&#8377;<%=(listing.price +(listing.price * 0.18)).toLocaleString("en-IN") %> / night </span>
+                        </p>
+                    </div>
+                </div>
+            </a>    
+        <% } %>
+    </div>
+    
+    <!-- Card --> 
+
+<script>
+    
+    function redirectToPage(filterType) {
+    window.location.href = `/user/listings/search?query=${filterType}`;
+    }
+    
+    let taxSwitch = document.getElementById("flexSwitchCheckDefault");
+    taxSwitch.addEventListener("click",()=>{
+        let taxInfo=document.getElementsByClassName("tax-info");
+        for(info of taxInfo){
+            if(info.style.display!="inline"){
+                info.style.display="inline"
+            }else{
+                info.style.display="none";
+            }
+        }
+        let notaxInfo=document.getElementsByClassName("no-tax-info");
+        for(info of notaxInfo){
+            if(info.style.display!="none"){
+                info.style.display="none"
+            }else{
+                info.style.display="inline";
+            }
+        }
+        
+    })
+</script>

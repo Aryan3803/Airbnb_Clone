@@ -21,12 +21,29 @@
         
         <div class="mb-3">
            Original Listing Image <br>
-           <img src=" <%= originalImageUrl  %>">
+           <img src=" <%= originalImageUrl  %> " style="width: 250px;">
         </div>
+
+        
 
         <div class="mb-3">
             <label for="image" class="form-label">Upload New Image</label>
             <input type="file" name="listing[image]" placeholder="Enter image/URL" class="form-control">
+        </div>
+
+        <div class="mb-3 ">
+            <label for="category">Category</label>
+            <select id="category" name="listing[category][]" data-placeholder="Select Categories" multiple data-multi-select>
+                <option value="trending" selected>Trending Rooms</option>
+                <option value="Iconic cities">Iconic Cities</option>
+                <option value="mountains">Mountains</option>
+                <option value="castles">Castles</option>
+                <option value="amazing pools">Amazing Pools</option>
+                <option value="camping">Camping</option>
+                <option value="farms">Farms</option>
+                <option value="arctic domes">Arctic Domes</option>
+                <option value="boat">Boat</option>
+            </select>                   
         </div>
         
         <!-- Price and Country in same row -->

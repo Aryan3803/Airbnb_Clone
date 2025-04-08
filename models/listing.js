@@ -15,6 +15,7 @@ const ListingSchema=new Schema({
     price:Number,
     location:String,
     country:String,
+    category: [String],
     reviews:[
       {
       type: Schema.Types.ObjectId,
@@ -23,7 +24,7 @@ const ListingSchema=new Schema({
   ],
   owner:{
     type: Schema.Types.ObjectId,
-    ref:"User", 
+    ref:"Admin", 
   }
 });
 
